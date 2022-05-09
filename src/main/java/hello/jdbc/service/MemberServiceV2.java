@@ -2,6 +2,7 @@ package hello.jdbc.service;
 
 import hello.jdbc.domain.Member;
 import hello.jdbc.repository.MemberRepositoryV1;
+import hello.jdbc.repository.MemberRepositoryV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 public class MemberServiceV2 {
 
     private final DataSource dataSource;
-    private final MemberRepositoryV1 memberRepository;
+    private final MemberRepositoryV2 memberRepository;
 
     public void accountTransfer(String fromId, String toId, int money) throws SQLException {
 
@@ -36,12 +37,12 @@ public class MemberServiceV2 {
     }
 
     private void bizLogic(Connection con, String fromId, String toId, int money) throws SQLException {
-        Member fromMember = memberRepository.findById(fromId);
-        Member toMember = memberRepository.findById(toId);
+        Member fromMember = memberRepository.findById(con, fromId);
+        Member toMember = memberRepository.findById(con, toId);
 
-        memberRepository.update(fromMember.getMemberId(), fromMember.getMoney() - money);
+        memberRepository.update(con, fromMember.getMemberId(), fromMember.getMoney() - money);
         validation(toMember);
-        memberRepository.update(toMember.getMemberId(), toMember.getMoney() + money);
+        memberRepository.update(con, toMember.getMemberId(), toMember.getMoney() + money);
     }
 
     private void release(Connection con) {
