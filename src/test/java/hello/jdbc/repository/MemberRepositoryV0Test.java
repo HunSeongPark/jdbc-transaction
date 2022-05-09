@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * Created by Hunseong on 2022/05/10
  */
